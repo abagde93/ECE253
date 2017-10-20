@@ -1,6 +1,6 @@
 %Problem 2: Simple image manipulation
-clear;
-clc;
+%clear;
+%clc;
 
 %(i) Download any color image from the Internet with a spatial resolution of no more than (720
 %X 480). Read this image into MATLAB. Call this image A.
