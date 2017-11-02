@@ -11,8 +11,8 @@
 clear;
 clc;
 
-input_image = imread('airplane_gray.png');
-win_size = 15;
+input_image = imread('beach.png');
+win_size = 133;
 
 pad = (win_size -1)/2;
 padded_image = padarray(input_image,[pad pad],'symmetric');
