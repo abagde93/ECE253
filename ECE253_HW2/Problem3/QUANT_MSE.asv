@@ -1,16 +1,12 @@
 %Problem 3 - Lloyd-Max Quantizer
 
-function QUANT_MSE(input_image)
+function MSE = QUANT_MSE(im)
 
 %%Part1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Defined seperate function myQuantize
-
-%Read in uint8 greayscale images
-im = imread(input_image);
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%Part2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Part2 and Part3%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Reshape image in order to perform Lloyd-Max quantizing
 [M,N] = size(im);
@@ -26,7 +22,7 @@ for s = 1:1:7
       im_quantized = myQuantize(im, s);
       
       %Find MSE between myQuantize'd and original image
-      MSE = sum((sum(((im - im_quantized).^2))))/numel(im);
+      MSE = sum((sum(((im_quantized - im).^2))))/numel(im);
       MSE_myQ_orig = [MSE_myQ_orig, MSE];
       
       %Performing Lloyd Max quantization
@@ -39,12 +35,16 @@ for s = 1:1:7
       im_lloyd = uint8(im_lloyd);
       
       %Find MSE between LM-Quantize'd and original image
-      MSE = sum((sum(((diver - im_lloyd).^2))))/numel(diver);
+      MSE = sum((sum(((im_lloyd - im).^2))))/numel(im);
       MSE_LM_orig = [MSE_LM_orig, MSE];
       
+      %Show images at s-bit quantization levels
+      subplot(2,7,s)
+      imshow(im_quantized)
+      title(sprintf('myQuantize %d bit', s))
       
       
-      subplot(2,4,s)
+      subplot(2,7,s+7)
       imshow(im_lloyd)
       title(sprintf('Lloyd-Max %d bit', s))
 end
@@ -52,8 +52,14 @@ end
 %Plot MSE vs bits
 figure
 subplot(1,2,1)
-imshow(MSE_myQ_orig)
-title('MSE - myQuantize & Original')
+plot(MSE_myQ_orig)
+title('MSE - myQuantize')
+xlabel('#-bit image')
+ylabel('MSE')
+
+subplot(1,2,2)
+plot(MSE_LM_orig)
+title('MSE - LM-Quantize')
 xlabel('#-bit image')
 ylabel('MSE')
 
