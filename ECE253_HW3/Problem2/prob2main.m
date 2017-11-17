@@ -3,9 +3,13 @@
 clear;
 clc;
 
+
+%Part (i)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 img = imread('car.tif');
 imshow(img)
-pad_img = padarray(img, [133 172]);
+r = 133;
+c = 172;
+pad_img = padarray(img, [r c]);
 
 %Show FFT of image with "impulse-like" bursts
 pad_img = fft2(pad_img);
@@ -20,7 +24,7 @@ ylabel('v');
 [u,v]=meshgrid(-256:255);
 
 %Implement the Notch reject filter
-D_0 = 1;
+D_0 = 40;
 n = 2;
 
 
@@ -62,10 +66,66 @@ figure
 imagesc(-256:255,-256:255,log(abs(G)));
 colorbar;
 
-G = ifft2(G);
-G = uint8(G);
+reconstructed_img = ifft2(ifftshift(G));
+reconstructed_img = reconstructed_img(r+1:end-r, c+1:end-c);
+reconstructed_img = uint8(reconstructed_img);
 figure
-imshow(G)
+imshow(reconstructed_img)
+
+%Part (2)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+img = imread('Street.png');
+figure
+imshow(img)
+r = 180;
+c = 153;
+pad_img = padarray(img, [r c],'post');
+
+%Show FFT of image with "impulse-like" bursts
+pad_img = fft2(pad_img);
+pad_img = fftshift(pad_img);
+
+figure
+imagesc(-256:255,-256:255,log(abs(pad_img)));
+colorbar;
+xlabel('u');
+ylabel('v');
+
+[u,v]=meshgrid(-256:255);
+
+%Implement the Notch reject filter
+D_0 = 10;
+n = 4;
+
+
+u_k = -166.7;
+v_k = 0;
+D_K = ((u - u_k).^2 + (v - v_k).^2).^.5;
+D_negK = ((u + u_k).^2 + (v + v_k).^2).^.5;
+filt_p = 1./(1+(D_0./D_K).^(2*n));
+filt_n = 1./(1+(D_0./D_negK).^(2*n));
+filter1 = filt_p.*filt_n;
+
+u_k = 0;
+v_k = 166;
+D_K = ((u - u_k).^2 + (v - v_k).^2).^.5;
+D_negK = ((u + u_k).^2 + (v + v_k).^2).^.5;
+filt_p = 1./(1+(D_0./D_K).^(2*n));
+filt_n = 1./(1+(D_0./D_negK).^(2*n));
+filter2 = filt_p.*filt_n;
+
+
+%Apply notch filter(s) to image
+G = pad_img.*filter1.*filter2; 
+figure
+imagesc(-256:255,-256:255,log(abs(G)));
+colorbar;
+
+reconstructed_img = ifft2(ifftshift(G));
+reconstructed_img = reconstructed_img(1:end-r, 1:end-c);
+reconstructed_img = uint8(reconstructed_img);
+figure
+imshow(reconstructed_img)
+
 
 
 
