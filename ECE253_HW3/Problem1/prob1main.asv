@@ -11,37 +11,26 @@ blur_image = gaussianBlur(img,2);
 %imshow(uint8(blur_image))
 
 %ii)Using the blurOrSharpen() function
-blur_sharpen_img = blurOrSharpen(img,2,1);
+blur_sharpen_img = blurOrSharpen(blur_image,6,1);
 %figure
 %imshow(uint8(blur_sharpen_img))
 
 %iii)Using the gaussianUnblur function - input to this is the blurred image
 %created in part i
-[output,mse_residuals,mse_original] = gaussianUnblur(blur_image,2,10,.0001);
-%scale mse_original
-current_max = max(mse_original);
-current_min = min(mse_original);
-mse_original = ((mse_original-current_min)*(255))/(current_max-current_min);
+[output,mse_residuals,mse_original] = gaussianUnblur(blur_image,2,200,.0001);
 
-%part b)
-im_noisy = single(imnoise(uint8(blur_image), 'gaussian'));
-[output_noisy,mse_residuals,mse_original] = gaussianUnblur(im_noisy,2,10,.0001);
-
-subplot(2,3,1)
+subplot(2,2,1)
 imshow(uint8(img))
 title('original image')
-subplot(2,3,2)
+subplot(2,2,2)
 imshow(uint8(blur_image))
 title('blurred image')
-subplot(2,3,3)
+subplot(2,2,3)
 imshow(uint8(blur_sharpen_img))
 title('blurred/sharpened image')
-subplot(2,3,4)
+subplot(2,2,4)
 imshow(uint8(output))
 title('shaprpened image')
-subplot(2,3,5)
-imshow(uint8(output_noisy))
-title('shaprpened image w/noise')
 
 figure
 plot(mse_residuals)

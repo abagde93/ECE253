@@ -7,9 +7,9 @@ clc;
 %Part (i)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 img = imread('car.tif');
 imshow(img)
-r = 133;
-c = 172;
-pad_img = padarray(img, [r c]);
+r = 266;
+c = 344;
+pad_img = padarray(img, [r c],'post');
 
 %Show FFT of image with "impulse-like" bursts
 pad_img = fft2(pad_img);
@@ -67,7 +67,7 @@ imagesc(-256:255,-256:255,log(abs(G)));
 colorbar;
 
 reconstructed_img = ifft2(ifftshift(G));
-reconstructed_img = reconstructed_img(r+1:end-r, c+1:end-c);
+reconstructed_img = reconstructed_img(1:end-r, 1:end-c);
 reconstructed_img = uint8(reconstructed_img);
 figure
 imshow(reconstructed_img)

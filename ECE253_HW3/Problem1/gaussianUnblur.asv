@@ -8,7 +8,7 @@ I_0 = im_in;
 
 %Read in original image, only for purposes of calculating MSE
 img = imread('brain.tif');
-%img = single(img);
+img = single(img);
 
 %Set initial I_k
 I_k = im_in;
