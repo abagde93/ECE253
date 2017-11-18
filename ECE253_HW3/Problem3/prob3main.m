@@ -19,9 +19,9 @@ title('Cross Correlation(Letters) - spatial')
 
 
 img_fft = fft2(img);
-template_fft = padarray(template, size(img_fft)-size(template),'post');
+template_fft = padarray(template_flip, size(img_fft)-size(template),'post');
 template_fft = fft2(template_fft);
-test = img_fft .* conj(template_fft);
+test = img_fft .* (template_fft);
 test = ifft2(test);
 figure
 imshow(test,[])
@@ -48,7 +48,7 @@ title('Cross Correlation(StopSign) - spatial')
 img_fft = fft2(img);
 template_fft = padarray(template_flip, size(img_fft)-size(template),'post');
 template_fft = fft2(template_fft);
-test = img_fft .* conj(template_fft);
+test = img_fft .* (template_fft);
 test = ifft2(test);
 figure
 imshow(test,[])
