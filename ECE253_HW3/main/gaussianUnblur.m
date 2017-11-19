@@ -8,7 +8,7 @@ I_0 = im_in;
 
 %Read in original image, only for purposes of calculating MSE
 img = imread('brain.tif');
-img = single(img);
+%img = single(img);
 
 %Set initial I_k
 I_k = im_in;
@@ -30,7 +30,7 @@ while MSE_r > t && iterations < max_iter
     I_k_prev = I_k;
     
     %(a) Compute A_k = I_k * G_sigma
-    [rows,cols] = size(I_k);
+    %[rows,cols] = size(I_k);
     %I_k = padarray(I_k,[pad pad],'symmetric');
     A_k = imfilter(I_k,h);
     %A_k = imcrop(A_k,[pad pad cols-1 rows-1]);
@@ -61,5 +61,4 @@ end
     
     
     
-
 
