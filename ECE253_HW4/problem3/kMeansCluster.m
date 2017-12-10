@@ -4,7 +4,7 @@ function [idx, centers] = kMeansCluster(features, centers)
 
 idx = zeros(row,1);
 
-max_iter = 200;
+max_iter = 90;
 counter = 0;
 while(counter < max_iter)
     
@@ -23,7 +23,6 @@ while(counter < max_iter)
         centers(i,:) = mean(center_average);   
     end
         
-    
             
     counter = counter + 1;        
             
